@@ -315,3 +315,20 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
     git commit -a -m "feat(design): landing page"
     git push origin main
     ```
+
+### global settings (params.xsl)
+
+Some answers from the initialisation process are stored in `xslt/partials/params.xsl`. 
+
+1. replace
+    ```xml
+    <xsl:param name="project_short_title">MRP (statisch)</xsl:param>
+    ```
+    with
+    ```xml
+    <xsl:param name="project_short_title">MRP</xsl:param>
+    ```
+1. rebuild e.g. `index.html`
+1. check [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+    * make sure you have a development server up and running
+    * `MRP (statisch)` -> `MRP`
