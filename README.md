@@ -41,3 +41,49 @@ In this section we are going to build a lightweight static version of [Die Minis
         * A: `mrp-data`
     1. Q: [12/12] A GitHub repo where the data of you app can be found. The default value is a combination of the answers 'github_repo' and 'data_dir'. (https://github.com/acdh-tool-gallery/mrp-data):
         * A: `https://github.com/acdh-tool-gallery/mrp-data`
+1. change into new created directory `mrp-static`
+1. run `./fetch_data.sh` to download the data from https://github.com/acdh-tool-gallery/mrp-data into the current project
+1. run `ant` to build the website, i.e. converting TEI/XML-Documents into HTML-Files
+1. optional: change directory into `html` and start a webserver
+    ```shell
+    cd html && python -m http.server
+    ```
+1. optional: visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+
+
+### Create GitHub Repo and make the initial commit
+
+1. create the GitHub repo that you named in Question 6 (https://github.com/acdh-tool-gallery/mrp-static)
+1. go to https://github.com/acdh-tool-gallery and click on the green button "New"
+1. fill out the form
+    1. Repository name
+        * `mrp-static` same as your answer to Question 1/12
+    1. Description
+        * static demo version of https://mrp.oeaw.ac.at/pages/index.html
+    1. Choose visibility *
+        * public (if private you'd need to pay to use GitHub-Actions and GitHub-Pages)
+    1. leave the rest and click the green button "Create repository"
+1. go back to the console and make sure you are in the `mrp-static` folder
+1. run the following commands to initialize a git repo, link it to https://github.com/acdh-tool-gallery/mrp-static add, commit and push all files
+    ```bash
+    git init
+    git add --all
+    git commit -a -m "init commit"
+    git branch -M main
+    git remote add origin https://github.com/acdh-tool-gallery/mrp-static.git
+    git push -u origin main
+    ```
+    this takes a short while because many files need to be processed/uploaded
+1. go to https://github.com/acdh-tool-gallery/mrp-static 
+
+
+### Deploy the digital edition via GitHub Pages
+
+1. go to https://github.com/acdh-tool-gallery/mrp-static/settings/pages
+1. from the dropdown list **Build and deployment** select `GitHub Actions`
+1. go to https://github.com/acdh-tool-gallery/mrp-static/actions
+1. click on **Deploy static content to Pages** (on the left side)
+1. click on the grey button **Run workflow**
+    * click on the green button **Run workflow**
+1. reload https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml and wait for a yellow spinning circle. Click on it and watch how the app is going to be build and deployed (can take 1-2 minutes)
+1. when everything is done your app should be online under [https://acdh-tool-gallery.github.io/mrp-static/](https://acdh-tool-gallery.github.io/mrp-static/)
