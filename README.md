@@ -91,10 +91,13 @@ In this section we are going to build a lightweight static version of [Die Minis
 
 ### Develop/adapt/modify the digital edition
 
-This section exemplifies some basic development best practices 
+This section exemplifies some basic development best practices
+* usage of XML-Oxygen and Transformation Scenarios
+* usage of variables
+* Commit, push and (re)deploy
 
 #### correct document title
-e.g. https://acdh-tool-gallery.github.io/mrp-static/toc.html makes not much sense
+e.g. [https://acdh-tool-gallery.github.io/mrp-static/toc.html](https://acdh-tool-gallery.github.io/mrp-static/toc.html) makes not much sense
 
 1. check the data, e.g. [https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.xml](https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.html)
 
