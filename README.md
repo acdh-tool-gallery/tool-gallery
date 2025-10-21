@@ -7,7 +7,7 @@
 
 In this section we are going to build a lightweight static version of [Die Ministerratsprotokolle 1848–1918](https://mrp.oeaw.ac.at/pages/index.html)
 
-1. go to https://github.com/acdh-oeaw/dse-static-cookiecutter
+1. go to [https://github.com/acdh-oeaw/dse-static-cookiecutter](https://github.com/acdh-oeaw/dse-static-cookiecutter)
 1. read and follow the [Quickstart-Section](https://github.com/acdh-oeaw/dse-static-cookiecutter?tab=readme-ov-file#quickstart)
 1. optional: install Python and Cookiecutter
     * e.g. use [uv](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2)
@@ -395,7 +395,6 @@ Some answers from the initialisation process are stored in `xslt/partials/params
     }
     ```
     to `html/css/style.css`
-
 
 
 ## Full text search (ToDo)
