@@ -274,5 +274,44 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
 
 #### landing page (index.html)
 
-1. new landing page
- 
+1. open `xslt/index.xsl`
+1. replace `<main> ... </main>`
+    with
+    ```xml
+    <main class="flex-shrink-0 flex-grow-1">
+        <div class="container col-xxl-8 pt-3">
+            <div class="row flex-lg-row align-items-center g-5 py-5">
+                <div class="col-lg-6">
+                    <h1 class="lh-base">
+                        <span class="display-6"><xsl:value-of select="$project_short_title"/></span>
+                        <br/>
+                        <span class="display-5"><xsl:value-of select="$project_title"/></span>
+                    </h1>
+                    <p class="text-end">Demo Applikation, erstellt für die ACDH Tool-Gallery 11.3</p>
+                    <p class="lead"> Die Daten stammen von: Stephan Kurz. (2024). oeaw-ministerratsprotokolle/mp-edition-data: v. 1.5 including CMR calendar data 1872–1914 (v.1.5). Zenodo. <a href="https://doi.org/10.5281/zenodo.11484662">https://doi.org/10.5281/zenodo.11484662</a></p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a href="search.html" type="button" class="btn btn-primary btn-lg px-4 me-md-2">Volltextsuche</a>
+                        <a href="toc.html" type="button" class="btn btn-outline-primary btn-lg px-4">Zu den Protokollen</a>
+                    </div>
+                </div>
+                <div class="col-10 col-sm-8 col-lg-6">
+                    <figure class="figure">
+                        <img src="images/title-image.jpg" class="d-block mx-lg-auto img-fluid" alt="Friedrich Ferdinand Freiherr von Beust, via Wikimedia Commons" width="400" height="600" loading="lazy"/>
+                        <figcaption class="pt-3 figure-caption">Friedrich Ferdinand Freiherr von Beust um 1860; von Autor/-in unbekannt - <a rel="nofollow" class="external free" href="http://www.aeiou.at/aeiou.encyclop.data.image.b/b417372a.jpg">http://www.aeiou.at/aeiou.encyclop.data.image.b/b417372a.jpg</a>, Gemeinfrei, <a href="https://commons.wikimedia.org/w/index.php?curid=1326691">Link</a></figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </main>
+    ```
+1. download [image](https://de.wikipedia.org/wiki/Friedrich_Ferdinand_von_Beust#/media/Datei:Friedrich_Ferdinand_von_Beust_1860.jpg) and save it as `html/images/title-image.jpg`
+    e.g. running
+    ```shell
+    curl -L "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Friedrich_Ferdinand_von_Beust_1860.jpg/594px-Friedrich_Ferdinand_von_Beust_1860.jpg?download" -o html/images/title-image.jpg
+    ```
+1. add, commit and push
+    ```shell
+    git add --all
+    git commit -a -m "feat(design): landing page"
+    git push origin main
+    ```
