@@ -13,7 +13,7 @@ In this section we are going to build a lightweight static version of [Die Minis
     * e.g. use [uv](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2)
 1. open a console
 1. initialize the project
-    ```bash
+    ```shell
     uvx cookiecutter gh:acdh-oeaw/dse-static-cookiecutter
     ```
 1. add project specific information (answer the questions)
@@ -54,7 +54,7 @@ In this section we are going to build a lightweight static version of [Die Minis
 ### Create GitHub Repo and make the initial commit
 
 1. create the GitHub repo that you named in Question 6 (https://github.com/acdh-tool-gallery/mrp-static)
-1. go to https://github.com/acdh-tool-gallery and click on the green button "New"
+1. go to [https://github.com/acdh-tool-gallery](https://github.com/acdh-tool-gallery) and click on the green button "New"
 1. fill out the form
     1. Repository name
         * `mrp-static` same as your answer to Question 1/12
@@ -64,7 +64,7 @@ In this section we are going to build a lightweight static version of [Die Minis
         * public (if private you'd need to pay to use GitHub-Actions and GitHub-Pages)
     1. leave the rest and click the green button "Create repository"
 1. go back to the console and make sure you are in the `mrp-static` folder
-1. run the following commands to initialize a git repo, link it to https://github.com/acdh-tool-gallery/mrp-static add, commit and push all files
+1. run the following commands to initialize a git repo, link it to [https://github.com/acdh-tool-gallery/mrp-static](https://github.com/acdh-tool-gallery/mrp-static) add, commit and push all files
     ```bash
     git init
     git add --all
@@ -74,16 +74,108 @@ In this section we are going to build a lightweight static version of [Die Minis
     git push -u origin main
     ```
     this takes a short while because many files need to be processed/uploaded
-1. go to https://github.com/acdh-tool-gallery/mrp-static 
+1. go to [https://github.com/acdh-tool-gallery/mrp-static](https://github.com/acdh-tool-gallery/mrp-static) 
 
 
 ### Deploy the digital edition via GitHub Pages
 
-1. go to https://github.com/acdh-tool-gallery/mrp-static/settings/pages
+1. go to [https://github.com/acdh-tool-gallery/mrp-static/settings/pages](https://github.com/acdh-tool-gallery/mrp-static/settings/pages)
 1. from the dropdown list **Build and deployment** select `GitHub Actions`
-1. go to https://github.com/acdh-tool-gallery/mrp-static/actions
+1. go to [https://github.com/acdh-tool-gallery/mrp-static/actions](https://github.com/acdh-tool-gallery/mrp-static/actions)
 1. click on **Deploy static content to Pages** (on the left side)
 1. click on the grey button **Run workflow**
     * click on the green button **Run workflow**
-1. reload https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml and wait for a yellow spinning circle. Click on it and watch how the app is going to be build and deployed (can take 1-2 minutes)
+1. reload [https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml](https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml) and wait for a yellow spinning circle. Click on it and watch how the app is going to be build and deployed (can take 1-2 minutes)
 1. when everything is done your app should be online under [https://acdh-tool-gallery.github.io/mrp-static/](https://acdh-tool-gallery.github.io/mrp-static/)
+
+
+### Develop/adapt/modify the digital edition
+
+This section exemplifies some basic development best practices 
+
+#### correct document title
+e.g. https://acdh-tool-gallery.github.io/mrp-static/toc.html makes not much sense
+
+1. check the data, e.g. [https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.xml](https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.html)
+
+```xml
+<titleStmt>
+    <title level="s" type="desc">Digitale Edition</title>
+    <title level="s" type="main" n="3">Die Protokolle des cisleithanischen Ministerrates 1867–1918</title>
+    <title level="s" type="main" n="0"/>
+    <title level="a" type="desc" n="044">Nr. 44 Ministerrat (19. Februar 1867–15. Dezember 1867)</title>
+    <title level="m" type="main">Band I: 1867</title>
+    <title level="m" type="main" n="01">Band 1</title>
+    <title level="m" type="sub" n="0"/>
+    <title level="m" type="sub">19. Februar 1867–15. Dezember 1867</title>
+    <title level="m" type="dates" from="1867-02-19" to="1867-12-15"/>
+    <meeting>
+        <placeName>Wien</placeName>
+        <orgName>Ministerrat</orgName>
+        <date when="1867-08-16">1867-08-16</date>
+    </meeting>
+</titleStmt>
+```
+1. hope for an easy to extract data point providing good title information
+1. `<title level="a" type="desc" n="044">Nr. 44 Ministerrat (19. Februar 1867–15. Dezember 1867)</title>` (actually created beforehand for this tool-gallery)
+1. open Oxygen-XML Editor
+    1. Project >> Open Project (ctrl + F2)
+    1. search for `mrp-static.xpr` and open it
+1. open `xslt/toc.xsl`
+1. adapt the XPath to the title node
+    * `<xsl:value-of select=".//tei:titleStmt/tei:title[1]/text()"/>` -> `<xsl:value-of select=".//tei:titleStmt/tei:title[@level='a']/text()"/>`
+1. build toc.html applying an already provided transformation scenario
+    * open `data/imprint.xml`
+    * click on the wrench symbol (or Document >> Transformation >> Apply|Configure Transformation Scenario)
+    * click **Apply associated (1)**
+    * check the result in the opened browser window
+
+#### fix broken link to document
+
+using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> returns nothing; therefore the links and ID column in the table are empty
+
+1. replace
+    ```xml
+    <xsl:variable name="full_path">
+        <xsl:value-of select="document-uri(/)"/>
+    </xsl:variable>
+    ```
+    with
+    ```xml
+    <xsl:variable name="docId">
+        <xsl:value-of select="document-uri(/)"/>
+    </xsl:variable>
+    ```
+1. replace the related code parts
+    * `<xsl:value-of select="replace(tokenize($full_path, '/')[last()], '.xml', '.html')"/>` -> `<xsl:value-of select="$docId"/>`
+1. rebuild toc.html (go to imprint.xml and hit ctrl+shif+T)
+
+
+#### fix title in edition detail view
+
+1. open `xslt/editions.xsl`
+2. replace
+    ```xml
+    <xsl:variable name="doc_title">
+        <xsl:value-of select=".//tei:titleStmt/tei:title[1]/text()"/>
+    </xsl:variable>
+    ```
+    with
+    ```xml
+    <xsl:variable name="doc_title">
+        <xsl:value-of select=".//tei:titleStmt/tei:title[@level='a']/text()"/>
+    </xsl:variable>
+    ```
+3. open e.g. data/editions/MRP-3-0-01-0-18670219-P-0001.xml and hit ctrl+shif+T (apply Transformation Scenario)
+    1. there is no scenario attached to this file
+    1. select "editions" (provided by the cookiecutter)
+    1. click on **edit** >> **output** >> check **Open in Browser**
+    1. click **OK**
+    1. click **Apply**
+
+
+#### persist changes and redeploy
+
+1. commit and push your changes (e.g. using Oxygen-Git Plugin)
+1. go to [https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml](https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml)
+1. click **Run workflow**
