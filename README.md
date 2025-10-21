@@ -1,9 +1,9 @@
 # [tool-gallery](https://www.oeaw.ac.at/acdh/newsevents/event-series/acdh-tool-gallery-113)
 
 
-## Show, don't tell
+> Show, don't tell
 
-### Initialize a new dse-static-cookiecutter instance
+## Initialize a new dse-static-cookiecutter instance
 
 In this section we are going to build a lightweight static version of [Die Ministerratsprotokolle 1848–1918](https://mrp.oeaw.ac.at/pages/index.html)
 
@@ -51,7 +51,7 @@ In this section we are going to build a lightweight static version of [Die Minis
 1. optional: visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 
-### Create GitHub Repo and make the initial commit
+## Create GitHub Repo and make the initial commit
 
 1. create the GitHub repo that you named in Question 6 (https://github.com/acdh-tool-gallery/mrp-static)
 1. go to [https://github.com/acdh-tool-gallery](https://github.com/acdh-tool-gallery) and click on the green button "New"
@@ -77,7 +77,7 @@ In this section we are going to build a lightweight static version of [Die Minis
 1. go to [https://github.com/acdh-tool-gallery/mrp-static](https://github.com/acdh-tool-gallery/mrp-static) 
 
 
-### Deploy the digital edition via GitHub Pages
+## Deploy the digital edition via GitHub Pages
 
 1. go to [https://github.com/acdh-tool-gallery/mrp-static/settings/pages](https://github.com/acdh-tool-gallery/mrp-static/settings/pages)
 1. from the dropdown list **Build and deployment** select `GitHub Actions`
@@ -89,14 +89,14 @@ In this section we are going to build a lightweight static version of [Die Minis
 1. when everything is done your app should be online under [https://acdh-tool-gallery.github.io/mrp-static/](https://acdh-tool-gallery.github.io/mrp-static/)
 
 
-### Develop/adapt/modify the digital edition
+## Develop/adapt/modify the digital edition
 
 This section exemplifies some basic development best practices
 * usage of XML-Oxygen and Transformation Scenarios
 * usage of variables
 * Commit, push and (re)deploy
 
-#### correct document title
+### correct document title
 e.g. [https://acdh-tool-gallery.github.io/mrp-static/toc.html](https://acdh-tool-gallery.github.io/mrp-static/toc.html) makes not much sense
 
 1. check the data, e.g. [https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.xml](https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670816-P-0044.html)
@@ -133,7 +133,7 @@ e.g. [https://acdh-tool-gallery.github.io/mrp-static/toc.html](https://acdh-tool
     * click **Apply associated (1)**
     * check the result in the opened browser window
 
-#### fix broken link to document
+### fix broken link to document
 
 using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> returns nothing; therefore the links and ID column in the table are empty
 
@@ -157,10 +157,10 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
     ```xml
     <xsl:value-of select="$docId"/>`
     ```
-1. rebuild toc.html (go to imprint.xml and hit ctrl+shif+T)
+1. rebuild toc.html (go to imprint.xml and hit strg+shift+T)
 
 
-#### fix title in edition detail view
+### fix title in edition detail view
 
 1. open `xslt/editions.xsl`
 2. replace
@@ -175,7 +175,7 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
         <xsl:value-of select=".//tei:titleStmt/tei:title[@level='a']/text()"/>
     </xsl:variable>
     ```
-3. open e.g. data/editions/MRP-3-0-01-0-18670219-P-0001.xml and hit ctrl+shif+T (apply Transformation Scenario)
+3. open e.g. `data/editions/MRP-3-0-01-0-18670219-P-0001.xml` and hit strg+shift+T (apply Transformation Scenario)
     1. there is no scenario attached to this file
     1. select "editions" (provided by the cookiecutter)
     1. click on **edit** >> **output** >> check **Open in Browser**
@@ -183,17 +183,17 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
     1. click **Apply**
 
 
-#### persist changes and redeploy
+### persist changes and redeploy
 
 1. commit and push your changes (e.g. using Oxygen-Git Plugin)
 1. go to [https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml](https://github.com/acdh-tool-gallery/mrp-static/actions/workflows/build.yml)
 1. click **Run workflow**
 
-### Layout/Design
+## Layout/Design
 
 * basic templating system
 
-#### footer
+### footer
 
 1. adapt/customize `xslt/partials/html_footer.xsl` by replacing existing `<footer></footer> with the snippet below
     ```xml
@@ -272,7 +272,7 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
 1. try out by converting any XML/TEI Dokument via Oxygen
 1. commit, push, redeploy
 
-#### landing page (index.html)
+### landing page (index.html)
 
 1. open `xslt/index.xsl`
 1. replace `<main> ... </main>`
@@ -316,7 +316,7 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
     git push origin main
     ```
 
-### global settings (params.xsl)
+## global settings (params.xsl)
 
 Some answers from the initialisation process are stored in `xslt/partials/params.xsl`. 
 
@@ -332,3 +332,72 @@ Some answers from the initialisation process are stored in `xslt/partials/params
 1. check [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
     * make sure you have a development server up and running
     * `MRP (statisch)` -> `MRP`
+
+## Entities
+
+### customize listperson.html
+1. open `xslt/listperson.xsl`
+1. open `data/indices/listperson.xml`
+1. analyze `data/indices/listperson.xml`
+    * z.B. `<person xml:id="mpr2049">`
+    * occupation
+    * mentions (tei:noteGrp)
+
+1. add new columns to `xslt/listperson.xsl`
+    ```xml
+    <th scope="col" tabulator-headerFilter="input">Tätigkeit</th>
+    <th scope="col" tabulator-headerFilter="input">Erwähnungen</th>
+    ```
+1. populate those columns
+    ```xml
+    <td>
+        <xsl:value-of select="string-join(.//tei:occupation, ', ')"/>
+    </td>
+    <td>
+        <xsl:value-of select="count(.//tei:noteGrp/tei:note[@type='mentions'])"/>
+    </td>
+    ```
+
+> [!IMPORTANT]  
+> Denormalisation! Make sure that your data provides the information needed to link from an index file to the actual mentions.
+
+#### fix Erwähnt in
+1. in `xslt/listperson.xsl` change
+    ```xml
+    <xsl:if test="./tei:noteGrp/tei:note[@type = 'mentions']">
+        <dt>Erwähnt in</dt>
+        <dd>
+            <xsl:for-each select="./tei:noteGrp/tei:note[@type = 'mentions']">
+                <a href="{replace(@target, '.xml', '.html')}">
+                    <xsl:value-of select="./text()"/>
+                </a>
+            </xsl:for-each>
+        </dd>
+    </xsl:if>
+    ```
+    to
+    ```xml
+    <xsl:if test="./tei:noteGrp/tei:note[@type = 'mentions']">
+        <dt>Erwähnt in</dt>
+        <xsl:for-each select="./tei:noteGrp/tei:note[@type = 'mentions']">
+            <dd>
+                <a href="{replace(@target, '.xml', '.html')}">
+                    <xsl:value-of select="./text()"/>
+                </a>
+            </dd>
+        </xsl:for-each>
+    </xsl:if>
+    ```
+1. style `<dl>` by adding
+    ```css
+    dd {
+    margin-left: 1rem;
+    }
+    ```
+    to `html/css/style.css`
+
+
+
+## Full text search (ToDo)
+
+
