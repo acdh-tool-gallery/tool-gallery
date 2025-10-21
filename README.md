@@ -1,9 +1,9 @@
-## [tool-gallery](https://www.oeaw.ac.at/acdh/newsevents/event-series/acdh-ch-tool-galleries)
+# [tool-gallery](https://www.oeaw.ac.at/acdh/newsevents/event-series/acdh-ch-tool-galleries)
 
 
-# Show, don't tell
+## Show, don't tell
 
-## Initialize a new dse-static-cookiecutter instance
+### Initialize a new dse-static-cookiecutter instance
 
 In this section we are going to build a lightweight static version of [Die Ministerratsprotokolle 1848–1918](https://mrp.oeaw.ac.at/pages/index.html)
 
