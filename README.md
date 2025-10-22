@@ -396,7 +396,57 @@ Some answers from the initialisation process are stored in `xslt/partials/params
     ```
     to `html/css/style.css`
 
-
 ## Full text search (ToDo)
+### Typesene
+* Full text search relies on the external search server [Typesense](https://typesense.org/).
+* ACDH hosts one instance but for development you can run Typesense locally, see [how to run typesense locally using Docker](https://typesense.org/docs/guide/install-typesense.html#docker)
+* You can also use a hosted version via [https://cloud.typesense.org](https://cloud.typesense.org)
+
+### dse-static-cookiecutter's typesense integration
+
+#### building the index
+
+1. make sure your local Typesense is running / you set proper environment variables
+1. check `pyscripts/make_ts_index.py` if it fits your data
+    1. it does not, we want to have another document title: replace
+    ```python
+    record["title"] = doc.any_xpath(".//tei:titleStmt/tei:title[1]")[0].text
+    ```
+    with
+    ```python
+    record["title"] = doc.any_xpath(".//tei:titleStmt/tei:title[@level='a']")[0].text
+    ```
+1. optional: check if you have the required packages installed (see `pyproject.toml`)
+1. run `uv run pyscripts/make_ts_index.py` from `mrp-static`
+1. check the created index, e.g. via [Typesense-Dashboard]
+    1. install and run it via docker
+    ```shell
+    docker run -d -p 80:80 ghcr.io/bfritscher/typesense-dashboard:latest
+    ```
+    1. go to [http://127.0.0.1](http://127.0.0.1)
+1. include the building of the search index in the deployment workflow
+    1. replace
+    ```yaml
+    - name: Build the app
+      run: ant
+    - name: Setup Pages
+    ```
+    with 
+    ```yaml
+    - name: Build the app
+      run: ant
+    - name: Create search index
+      run: python pyscripts/make_ts_index.py
+    - name: Setup Pages
+    ```
+1. create a repository (or organisation) secret called `TYPESENSE_API_KEY`
+    1. go to [https://github.com/acdh-tool-gallery/mrp-static/settings/secrets/actions](https://github.com/acdh-tool-gallery/mrp-static/settings/secrets/actions)
+    1. click the green button **New repository secret**
+    1. **Name** -> TYPESENSE_API_KEY
+    1. **Secret** -> your Typesense api key
+1. commit, push, redeploy, and check if the index was created
 
 
+#### building the search interface
+
+Once the index is created, we can create a search page in our website.
