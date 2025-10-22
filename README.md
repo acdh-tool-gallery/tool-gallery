@@ -391,16 +391,17 @@ Some answers from the initialisation process are stored in `xslt/partials/params
 1. style `<dl>` by adding
     ```css
     dd {
-    margin-left: 1rem;
+        margin-left: 1rem;
     }
     ```
     to `html/css/style.css`
 
-## Full text search (ToDo)
+## Full text search
 ### Typesene
 * Full text search relies on the external search server [Typesense](https://typesense.org/).
 * ACDH hosts one instance but for development you can run Typesense locally, see [how to run typesense locally using Docker](https://typesense.org/docs/guide/install-typesense.html#docker)
 * You can also use a hosted version via [https://cloud.typesense.org](https://cloud.typesense.org)
+* The scripts provided by dse-static-cookiecutter to **build the index** and to **query the index** should be seen as examples how indexing and searching could be implemented. They most likely won't work out of the box for your own data/edition.
 
 ### dse-static-cookiecutter's typesense integration
 
@@ -418,7 +419,7 @@ Some answers from the initialisation process are stored in `xslt/partials/params
     ```
 1. optional: check if you have the required packages installed (see `pyproject.toml`)
 1. run `uv run pyscripts/make_ts_index.py` from `mrp-static`
-1. check the created index, e.g. via [Typesense-Dashboard]
+1. check the created index, e.g. via [Typesense-Dashboard](https://github.com/bfritscher/typesense-dashboard)
     1. install and run it via docker
     ```shell
     docker run -d -p 80:80 ghcr.io/bfritscher/typesense-dashboard:latest
@@ -450,3 +451,61 @@ Some answers from the initialisation process are stored in `xslt/partials/params
 #### building the search interface
 
 Once the index is created, we can create a search page in our website.
+The search page is created using [instantsearch.js](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js) and [typesense-instantsearch-adapter](https://github.com/typesense/typesense-instantsearch-adapter)
+
+1. create a search API-KEY for your newly created collection `mrp-static`
+    1. go to your [Typesense-Dashboard](http://127.0.0.1)
+    1. click on [**API Keys**](http://127.0.0.1/#/apikeys)
+    1. click on **CREATE API KEY**
+    1. click on **SEARCH KEY EXAMPLE**
+    1. replace `companies` with `mrp-static`
+        * dse-static-cookiecutter names the Typesense collection same as `directory_name` you provided on initialization
+    1. click **CREATE API KEY**
+    1. copy the key
+    1. paste it into `html/js/search.js`
+        * replace 
+        ```javascript
+        const apiKey = "0drlT8CHD6T9z8QxQjYXvSWT2dZ75nPv"; /* change this */
+        ```
+        with
+        ```javascript
+        const apiKey = "the new key"; /* change this */
+        ```
+1. check if [http://127.0.0.1:8000/search.html](http://127.0.0.1:8000/search.html) actually works (it won't)
+1. check why: 
+    > Error: 404 - Could not find a facet field named `bibl_entities.label` in the schema.
+    >
+    > Error: 404 - Could not find a facet field named `bibl_entities.label` in the schema.
+1. check if the Error tells the truth by inspecting the created collection schema via [Typesense-Dashboard](http://127.0.0.1/#/collection/mrp-static/schema)
+    * yes the machine is correct
+1. fix the code 
+    1. (re)open `html/js/search.js`
+    1. search for something like `bibl_entities`
+    1. remove the related code snippets
+    ```javascript
+    ${hit.bibl_entities.map(
+    (item) =>
+        html`<a href="${item.id}.html" class="pe-2 custom-link"><i class="bi bi-book pe-1"></i>${item.label}</a>`
+    )}
+    <br />
+    ...
+    instantsearch.widgets.panel({
+        collapsed: ({ state }) => {
+        return state.query.length === 0;
+        },
+        templates: {
+        header: "Literatur",
+        },
+    })(instantsearch.widgets.refinementList)({
+        container: "#rf-works",
+        attribute: "bibl_entities.label",
+        searchable: true,
+        showMore: true,
+        showMoreLimit: 50,
+        limit: 10,
+        searchablePlaceholder: "Suche nach Literatur",
+        cssClasses: DEFAULT_CSS_CLASSES,
+    }),
+    ```
+1. save and check again [http://127.0.0.1:8000/search.html](http://127.0.0.1:8000/search.html)
+1. commit, push, redeploy
