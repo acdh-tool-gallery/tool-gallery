@@ -25,13 +25,13 @@ In this section we are going to build a lightweight static version of [Die Minis
         * A: `MRP (statisch)`
     1. Q: [4/12] Default language of the project. Will be used as lang attribute in the html head elements. Can be customized later (de):
         * A: `de`
-    1. Q: [5/12] Either you GitHub User Name, or if you want to host your code repo as part of GitHub Organsiation, the organisation name. This information will be used to generate a link to the code repo of your application (acdh-oeaw):
+    1. Q: [5/12] Either your GitHub User Name, or if you want to host your code repo as part of GitHub Organisation, the organisation name. This information will be used to generate a link to the code repo of your application (acdh-oeaw):
         * A: `acdh-tool-gallery`
-    1. Q: [6/12] You can write whatever URL to your coderepo you want, or you take the default value which is a combination of the 'github_org' and 'directory_name'. (https://github.com/acdh-tool-gallery/mrp-static):
+    1. Q: [6/12] You can write whatever URL to your code repo you want, or you take the default value which is a combination of the 'github_org' and 'directory_name'. (https://github.com/acdh-tool-gallery/mrp-static):
         * A: `https://github.com/acdh-tool-gallery/mrp-static`
     1. Q: [7/12] The URL you have reserved for your website. (https://acdh-tool-gallery.github.io/mrp-static/):
         * A: `https://acdh-tool-gallery.github.io/mrp-static/`
-    1. Q: [8/12] The ID of the Redmine-Service-Issue for you application. This is needed to generate an up do date imprint (18716):
+    1. Q: [8/12] The ID of the Redmine-Service-Issue for you application. This is needed to generate an up to date imprint (18716):
         * A: `18716`
     1. Q: [9/12] Should i18n be included to provide translations 1 - no; 2 - yes; Chose from [1/2] (1):
         * A: `1`
@@ -269,7 +269,7 @@ using a more recent Saxon processor `<xsl:value-of select="document-uri(/)"/> re
         max-height: 150px;
     }
     ```
-1. try out by converting any XML/TEI Dokument via Oxygen
+1. try out by converting any XML/TEI Document via Oxygen
 1. commit, push, redeploy
 
 ### landing page (index.html)
@@ -397,7 +397,7 @@ Some answers from the initialisation process are stored in `xslt/partials/params
     to `html/css/style.css`
 
 ## Full text search
-### Typesene
+### Typesense
 * Full text search relies on the external search server [Typesense](https://typesense.org/).
 * ACDH hosts one instance but for development you can run Typesense locally, see [how to run typesense locally using Docker](https://typesense.org/docs/guide/install-typesense.html#docker)
 * You can also use a hosted version via [https://cloud.typesense.org](https://cloud.typesense.org)
@@ -517,24 +517,29 @@ The search page is created using [instantsearch.js](https://www.algolia.com/doc/
     * better visible row count
     * better a11y
     * click on row
+    * e.g. [dhd-book-abstracts-app](https://acdh-oeaw.github.io/dhd-abstracts-static/toc.html)
 * better edition detail view
     * rebuilding [original detail view](https://mrp.oeaw.ac.at/pages/show.html?document=MRP-3-0-03-1-18720314-P-0057.xml&directory=editions)
 * include para-texts into the edition
 * set up OAI-PMH endpoint
 * Calendar, visualisations, ...
 
+## Plug-ins
+* [interactivity](https://amp.acdh.oeaw.ac.at/amp-transcript__0062.html?tab=1r&prs=on&plc=on&wrk=on&org=on&eve=on) with [de-micro-editor](https://github.com/acdh-oeaw/de-micro-editor) by [Daniel Elsner](https://orcid.org/0000-0002-0636-4476)
+* [synoptic viewer](https://cfhaak.github.io/SynopticTextViewer/column_viewer.html?emptyLines=yes&globalLinenr=yes&localLinenr=no&witnessIds=A%2CBa%2CBb&currentLine=v_100) with [SynopticTextViewer](https://github.com/cfhaak/SynopticTextViewer) by [Carl Friedrich Haak](https://github.com/cfhaak)
+
 ## Bigger picture
 
-dse-static-cookiecutter tries to follow three principles **static**, **automatic**, **generic** so that you edition can be kept online forever.
+dse-static-cookiecutter tries to follow three principles **static**, **automatic**, **generic** so that your edition can be kept online forever.
 
 ### static
 No database, no application server needed; easy to host/maintain (just a bunch of HTML files)
 
 ### automatic
-All code needed to process, build, deploy should be managed by a single script/file; no more "But it runs on my machine". This is acchieved by `.github/workflows/build.yml` and as backup by `docker/Dockerfile`
+All code needed to process, build, deploy should be managed by a single script/file; no more "But it runs on my machine". This is achieved by `.github/workflows/build.yml` and as backup by `docker/Dockerfile`
 
 ### generic
-cookiecutter is used to create a similar starting point for your indvidual application. The idea is: You know one, you know all
+cookiecutter is used to create a similar starting point for your individual application. The idea is: You know one, you know all
 
 
 ## Actual pictures
