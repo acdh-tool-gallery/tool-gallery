@@ -509,3 +509,40 @@ The search page is created using [instantsearch.js](https://www.algolia.com/doc/
     ```
 1. save and check again [http://127.0.0.1:8000/search.html](http://127.0.0.1:8000/search.html)
 1. commit, push, redeploy
+
+## Possible next steps
+
+* better list views
+    * more information
+    * better visible row count
+    * better a11y
+    * click on row
+* better edition detail view
+    * rebuilding [original detail view](https://mrp.oeaw.ac.at/pages/show.html?document=MRP-3-0-03-1-18720314-P-0057.xml&directory=editions)
+* include para-texts into the edition
+* set up OAI-PMH endpoint
+* Calendar, visualisations, ...
+
+## Bigger picture
+
+dse-static-cookiecutter tries to follow three principles **static**, **automatic**, **generic** so that you edition can be kept online forever.
+
+### static
+No database, no application server needed; easy to host/maintain (just a bunch of HTML files)
+
+### automatic
+All code needed to process, build, deploy should be managed by a single script/file; no more "But it runs on my machine". This is acchieved by `.github/workflows/build.yml` and as backup by `docker/Dockerfile`
+
+### generic
+cookiecutter is used to create a similar starting point for your indvidual application. The idea is: You know one, you know all
+
+
+## Actual pictures
+
+### ACDH infrastructure (not only) for digital editions
+
+![ACDH-Infrastructure](images/dse-infrastructure-01.jpg)
+
+### What keeps running without ACDH
+![Without ACDH-Infrastructure](images/dse-infrastructure-03.jpg)
+
