@@ -333,6 +333,62 @@ Some answers from the initialisation process are stored in `xslt/partials/params
     * make sure you have a development server up and running
     * `MRP (statisch)` -> `MRP`
 
+## zotero
+
+Expose metadata via HTML-Meta tags for [Zotero](https://www.zotero.org/support/dev/exposing_metadata)
+
+1. modify `xslt/partials/zotero.xsl`
+    1. replace existing `<xsl:template name="zoterMetaTags">...</xsl:template>`
+        with
+        ```xml
+        <xsl:template name="zoterMetaTags">
+            <xsl:param name="zoteroTitle" select="false()"></xsl:param>
+            <xsl:param name="pageId" select="''"></xsl:param>
+            <xsl:param name="customUrl" select="$base_url"></xsl:param>
+            <xsl:variable name="fullUrl" select="concat($customUrl, $pageId)"/>
+            <xsl:if test="$zoteroTitle">
+                <meta name="citation_title" content="{$zoteroTitle}"/>
+            </xsl:if>
+            <meta name="citation_editors" content="Franz Adlgasser; Anatol Schmied-Kowarzik"/>
+            <meta name="citation_publisher" content="Österreichische Akademie der Wissenschaften"/>
+            <meta name="citation_book_title" content="{$project_title}"/>
+            <meta name="citation_public_url" content="{$fullUrl}"/>
+            <meta name="citation_date" content="2025"/>
+        </xsl:template>
+        ```
+
+1. for edition-detail view, add editor of current document
+    1. inspect the source-data, e.g. `data/editions/MRP-3-0-01-0-18670301-P-0006.xml`
+        ```xml
+        <editor key="http://d-nb.info/gnd/109427793" role="editor" ref="#editor_Malfer">
+        <persName>
+            <forename>Stefan</forename>
+            <surname>Malfèr</surname>
+        </persName>
+        <affiliation key="http://d-nb.info/gnd/1202798799" from="2020-01-01">Österreichische Akademie der Wissenschaften, Institute for Habsburg and Balkan Studies</affiliation>
+        <affiliation key="http://d-nb.info/gnd/1047201437" to="2019-12-31">Österreichische Akademie der Wissenschaften, Institut für Neuzeit- und Zeitgeschichtsforschung</affiliation>
+        <!-- Legacy Doppelung nur bei Malfèr, weil da das Institut noch INZ hieß -->
+        </editor>
+        ```
+    1. extract editor-name in `editions.xsl` and replace
+        ```xml
+        <!-- Provide the names of the authors/editors of the current unit, ideally fetched from the data via xslt or hard coded as below -->
+        <meta name="citation_author" content="Foo, Bar"/>
+        <meta name="citation_author" content="Bar, Foo"/> 
+        ```
+        with
+        ```xml
+        <xsl:for-each select=".//tei:titleStmt/tei:editor/tei:persName">
+            <meta name="citation_author" content="{string-join(.//text())}"/>
+        </xsl:for-each>
+        ```
+1. Transform `data/editions/MRP-3-0-01-0-18670301-P-0006.xml` with `xslt/editions.xsl` (`ant`)
+1. go to [http://127.0.0.1:8000/MRP-3-0-01-0-18670301-P-0006.html](http://127.0.0.1:8000/MRP-3-0-01-0-18670301-P-0006.html) and fetch Zotero metadata via Zotero browser plug-in
+1. check fetched item in Zotero
+    > Stefan Malfèr / Franz Adlgasser / Anatol Schmied-Kowarzik: Nr. 1 Ministerrat (19. Februar 1867–15. Dezember 1867). In: MRP (statisch). 2025. [https://acdh-tool-gallery.github.io/mrp-static/MRP-3-0-01-0-18670219-P-0001.html]
+
+
+
 ## Entities
 
 ### customize listperson.html
